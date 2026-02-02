@@ -264,23 +264,23 @@ export const ROWS = [
 
 export const PRICING_PLANS: PricingPlan[] = [
   {
-    id: 'quarterly',
-    duration: '3 Months',
-    period: 'Quarterly',
+    id: 'lifetime-basic',
+    duration: 'Lifetime Access',
+    period: 'One-time payment',
     price: '$49',
     originalPrice: '$199',
-    label: 'POPULAR',
-    features: ['Access to all courses', 'Mobile Access', 'HD Quality', 'Project Files'],
+    label: 'LIMITED OFFER',
+    features: ['Access to all 12 courses', 'Project Files Included', 'Mobile Access', 'HD Quality', '24/7 Support'],
     accentColor: 'border-brand-primary'
   },
   {
-    id: 'yearly',
-    duration: '12 Months',
-    period: 'Yearly',
+    id: 'lifetime-plus',
+    duration: 'Lifetime + Updates',
+    period: 'One-time payment',
     price: '$99',
     originalPrice: '$499',
     label: 'BEST VALUE',
-    features: ['Lifetime Access Logic', 'Priority Support', '4K Quality', 'Portfolio Review', 'Mentorship'],
+    features: ['Everything in Basic', 'All Future Course Updates', 'New AI Modules Free', 'Priority Mentor Chat', 'Official Certification'],
     accentColor: 'border-brand-accent shadow-glow'
   }
 ];

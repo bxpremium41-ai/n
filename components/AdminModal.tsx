@@ -111,7 +111,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose }) => {
                       <tr key={lead.id} className="hover:bg-gray-50 transition-colors">
                         <td className="px-6 py-4 font-mono text-gray-800">{lead.phone}</td>
                         <td className="px-6 py-4">
-                          <span className={`px-2 py-0.5 rounded text-[10px] border font-bold ${plan?.id === '12m' ? 'border-brand-primary/30 text-brand-primary bg-brand-primary/5' : 'border-gray-200 text-gray-500 bg-gray-100'}`}>
+                          <span className={`px-2 py-0.5 rounded text-[10px] border font-bold ${plan?.id === 'lifetime-plus' ? 'border-brand-primary/30 text-brand-primary bg-brand-primary/5' : 'border-gray-200 text-gray-500 bg-gray-100'}`}>
                             {plan ? plan.duration : lead.planId}
                           </span>
                         </td>
