@@ -57,13 +57,13 @@ export const StackedCarousel: React.FC<StackedCarouselProps> = ({ onCourseClick 
             {/* Left Side: Text Info */}
             <div className="flex-1 w-full lg:max-w-xl flex flex-col items-center lg:items-start text-center lg:text-left order-1 mb-16 lg:mb-0">
                 
-                {/* New Headline */}
+                {/* Updated Headline */}
                 <h2 className="text-3xl md:text-5xl font-display font-bold leading-tight mb-6 text-gray-900">
-                    Courses that will <br/>
-                    <span className="animate-skyrocket mr-2">skyrocket</span> 
-                    <TrendingUp className="inline-block mb-2 text-brand-primary animate-bounce" size={32} />
+                    Learn Courses that <br/>
+                    will <span className="animate-skyrocket mx-1">skyrocket</span> 
+                    <TrendingUp className="inline-block mb-2 text-brand-primary animate-bounce ml-2" size={32} />
                     <br/>
-                    your career
+                    your design career
                 </h2>
                 
                 {/* Description Rotator based on Active Index */}
@@ -112,48 +112,31 @@ export const StackedCarousel: React.FC<StackedCarouselProps> = ({ onCourseClick 
             {/* Right Side: Zoom & Slide Carousel */}
             <div className="w-full lg:flex-1 h-[500px] sm:h-[550px] relative order-2 flex items-center justify-center">
                  {COURSES.map((course, idx) => {
-                     // Calculate relative position
-                     // We need a circular buffer logic but for sliding transition
-                     let position = 'hidden'; // Default
-                     
-                     // Helper to handle the cyclic index logic
+                     let position = 'hidden'; 
                      const len = COURSES.length;
                      const prevIndex = (activeIndex - 1 + len) % len;
                      const nextIndex = (activeIndex + 1) % len;
 
-                     if (idx === activeIndex) {
-                         position = 'active';
-                     } else if (idx === nextIndex) {
-                         position = 'next';
-                     } else if (idx === prevIndex) {
-                         position = 'prev';
-                     }
+                     if (idx === activeIndex) position = 'active';
+                     else if (idx === nextIndex) position = 'next';
+                     else if (idx === prevIndex) position = 'prev';
 
                      let containerStyle = '';
                      let imageAnim = '';
-
-                     // Base Styles for the Card Container
                      const baseCard = "absolute transition-all duration-700 ease-in-out flex flex-col items-center";
-                     
-                     // Square aspect ratio for the frame
                      const frameSize = "w-[280px] h-[280px] sm:w-[350px] sm:h-[350px]";
 
                      if (position === 'active') {
-                         // Center, Full Opacity, Zooming Image
                          containerStyle = `z-30 opacity-100 translate-x-0 scale-100 pointer-events-auto`;
                          imageAnim = "animate-slow-zoom";
                      } else if (position === 'next') {
-                         // Waiting on Right
                          containerStyle = `z-10 opacity-40 translate-x-[60%] sm:translate-x-[80%] scale-90 blur-[2px] pointer-events-none`;
                      } else if (position === 'prev') {
-                         // Exiting to Left
                          containerStyle = `z-20 opacity-0 -translate-x-[80%] scale-100 pointer-events-none`;
                      } else {
-                         // Hidden behind
                          containerStyle = `z-0 opacity-0 scale-50 hidden`;
                      }
 
-                     // Random duration logic: (idx % 7) + 6 -> 6 to 12
                      const duration = (idx % 7) + 6;
 
                      return (
@@ -162,7 +145,6 @@ export const StackedCarousel: React.FC<StackedCarouselProps> = ({ onCourseClick 
                             className={`${baseCard} ${containerStyle} top-1/2 -translate-y-1/2`}
                             onClick={() => position === 'active' && onCourseClick(course)}
                          >
-                            {/* Title ABOVE the Frame */}
                             <div className="mb-6 text-center">
                                 <div className="text-brand-primary text-[10px] font-bold uppercase tracking-widest mb-2 bg-brand-primary/5 border border-brand-primary/10 px-3 py-1 rounded-full inline-block">
                                     COURSE {String(idx + 1).padStart(2, '0')} • {course.software}
@@ -176,9 +158,7 @@ export const StackedCarousel: React.FC<StackedCarouselProps> = ({ onCourseClick 
                                 </div>
                             </div>
 
-                            {/* The Image Frame */}
                             <div className={`${frameSize} rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white bg-gray-100 relative group cursor-pointer`}>
-                                {/* Image Wrapper for Zoom Animation */}
                                 <div className="w-full h-full overflow-hidden">
                                     <img 
                                         src={failedImages[course.id] ? fallbackImage : course.imageUrl} 
@@ -187,11 +167,7 @@ export const StackedCarousel: React.FC<StackedCarouselProps> = ({ onCourseClick 
                                         alt={course.title} 
                                     />
                                 </div>
-
-                                {/* Overlay Gradient */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
-
-                                {/* Bottom Button (Only visible details inside) */}
                                 <div className="absolute bottom-6 left-0 w-full flex justify-center">
                                     <button className="bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/40 text-white px-6 py-2 rounded-full text-xs font-bold flex items-center gap-2 transition-all group-hover:scale-105">
                                         View Course <ArrowRight size={14} />

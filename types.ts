@@ -1,4 +1,3 @@
-
 export interface Course {
   id: string;
   title: string;
@@ -22,6 +21,7 @@ export interface Testimonial {
   role: string;
   content: string;
   location: string;
+  verified?: boolean;
 }
 
 export interface FaqItem {

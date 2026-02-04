@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Course } from '../types';
-import { Play, Lock, ImageOff } from 'lucide-react';
+import { Play, Lock, Download } from 'lucide-react';
 
 interface NetflixCardProps {
   course: Course;
@@ -16,7 +16,7 @@ export const NetflixCard: React.FC<NetflixCardProps> = ({ course, onClick }) => 
   return (
     <div 
       onClick={() => onClick(course)}
-      className="group relative flex-shrink-0 w-[250px] md:w-[280px] cursor-pointer transition-all duration-300 hover:-translate-y-2"
+      className="group relative flex flex-col cursor-pointer transition-all duration-300 hover:-translate-y-2 w-full"
     >
       {/* Image Container - Square */}
       <div className="relative w-full aspect-square rounded-2xl overflow-hidden shadow-lg border border-gray-100 mb-4 group-hover:shadow-glow-lg transition-all duration-300 bg-gray-100">
@@ -36,20 +36,20 @@ export const NetflixCard: React.FC<NetflixCardProps> = ({ course, onClick }) => 
          </div>
 
          {/* Get All Courses Button - Centered Overlay */}
-         <div className="absolute inset-0 flex items-center justify-center opacity-100">
-            <button className="bg-brand-primary text-white text-[10px] md:text-xs font-bold px-4 py-2 md:py-3 rounded-full shadow-glow animate-pulse hover:animate-none hover:scale-105 transition-all flex items-center gap-2 border border-white/20">
-               <Play size={10} fill="currentColor" />
-               GET ALL COURSES
+         <div className="absolute inset-0 flex items-center justify-center opacity-100 px-4">
+            <button className="bg-brand-primary text-white text-[9px] md:text-xs font-bold px-3 py-2 md:px-5 md:py-3 rounded-full shadow-glow animate-pulse hover:animate-none hover:scale-105 transition-all flex items-center gap-2 border border-white/20 uppercase tracking-tighter md:tracking-normal">
+               <Download size={12} />
+               DOWNLOAD
             </button>
          </div>
       </div>
 
       {/* Title Below */}
-      <div className="px-1">
-        <div className="text-brand-primary text-[10px] font-bold uppercase tracking-widest mb-1">
+      <div className="px-1 text-center">
+        <div className="text-brand-primary text-[9px] md:text-[10px] font-bold uppercase tracking-widest mb-1">
            {course.software}
         </div>
-        <h3 className="text-gray-900 font-display font-bold text-lg leading-tight group-hover:text-brand-primary transition-colors">
+        <h3 className="text-gray-900 font-display font-bold text-sm md:text-lg leading-tight group-hover:text-brand-primary transition-colors line-clamp-2">
           {course.title}
         </h3>
       </div>
