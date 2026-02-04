@@ -192,7 +192,7 @@ const CallToActionWidget = ({ timeLeft, onClick }: { timeLeft: any, onClick: () 
           </div>
 
           <div className="mt-8 flex items-center justify-center gap-4 md:gap-8 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-            <div className="flex items-center gap-1.5"><ShieldCheck size={12} className="text-brand-success/70" /> 30-Day Guarantee</div>
+            <div className="flex items-center gap-1.5"><ShieldCheck size={12} className="text-brand-primary/70" /> 30-Day Guarantee</div>
             <div className="w-[1px] h-3 bg-gray-200"></div>
             <div className="flex items-center gap-1.5"><ImageIcon size={12} className="text-blue-400/70" /> Instant Download</div>
             <div className="w-[1px] h-3 bg-gray-200"></div>
@@ -333,8 +333,8 @@ const App: React.FC = () => {
           100% { transform: perspective(2000px) rotateY(0deg) translateX(0) scale(1); opacity: 1; }
         }
         @keyframes marquee {
-          0% { transform: translateX(100%); }
-          100% { transform: translateX(-100%); }
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
         }
         @keyframes popScale {
           0% { transform: scale(0.5); opacity: 0; }
@@ -345,9 +345,7 @@ const App: React.FC = () => {
           animation: popScale 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
         .animate-marquee {
-          display: inline-block;
-          white-space: nowrap;
-          animation: marquee 15s linear infinite;
+          animation: marquee 40s linear infinite;
         }
         .animate-liquid-flow { animation: liquidFlow 15s linear infinite; }
         .bg-grid-pattern { background-size: 40px 40px; background-image: linear-gradient(to right, rgba(0,0,0,0.015) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.015) 1px, transparent 1px); }
@@ -383,18 +381,31 @@ const App: React.FC = () => {
           The Only Design Books You Need
         </div>
         
-        {/* Banner 2: Marquee */}
+        {/* Banner 2: Seamless Marquee */}
         <div className="relative py-1.5 bg-gray-950 text-white overflow-hidden select-none">
-            <div className="animate-marquee inline-block">
-                <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] mx-10">
-                  Bestseller in Design segment in 23+ Countries
-                </span>
-                <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] mx-10">
-                  Bestseller in Design segment in 23+ Countries
-                </span>
-                <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] mx-10">
-                  Bestseller in Design segment in 23+ Countries
-                </span>
+            <div className="flex animate-marquee whitespace-nowrap">
+                <div className="flex shrink-0">
+                    <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] mx-10">
+                      Bestseller in Design segment in 23+ Countries
+                    </span>
+                    <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] mx-10">
+                      Bestseller in Design segment in 23+ Countries
+                    </span>
+                    <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] mx-10">
+                      Bestseller in Design segment in 23+ Countries
+                    </span>
+                </div>
+                <div className="flex shrink-0">
+                    <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] mx-10">
+                      Bestseller in Design segment in 23+ Countries
+                    </span>
+                    <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] mx-10">
+                      Bestseller in Design segment in 23+ Countries
+                    </span>
+                    <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] mx-10">
+                      Bestseller in Design segment in 23+ Countries
+                    </span>
+                </div>
             </div>
         </div>
       </div>
@@ -454,6 +465,7 @@ const App: React.FC = () => {
             <div className="container mx-auto px-6 max-w-5xl flex flex-col lg:flex-row items-start gap-8 md:gap-12 text-left">
                 <div className="w-2 md:w-5 h-48 md:h-96 bg-[#FF9F1C] rounded-full hidden md:block shrink-0 shadow-[4px_0_0_0_rgba(0,0,0,0.05)]"></div>
                 <div className="flex-1">
+                    {/* Fixed Error: Missing opening bracket for h2 tag */}
                     <h2 className="text-3xl md:text-7xl font-display font-bold text-gray-900 mb-8 md:mb-12 tracking-tighter leading-tight md:leading-[1.1]">
                         Learn Everything from zero to advance.
                     </h2>
