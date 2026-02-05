@@ -1,41 +1,27 @@
-export interface Course {
+
+export type DesignPhilosophy = 'Modernist' | 'Industrial' | 'Classical' | 'Biophilic';
+
+export type ProjectCapacity = '1-2' | '3-5' | '6+';
+
+export type ProfessionalRole = 'Interior Designer' | 'Architect' | 'Contractor' | 'Other' | 'Contact Inquiry';
+
+export interface Lead {
   id: string;
-  title: string;
-  software: string;
-  description: string;
-  imageUrl: string;
-  color: string;
-  students: string;
-  learningPoints: string[];
-  workflowImpact: string;
-}
-
-export interface Feature {
-  icon: any;
-  title: string;
-  description: string;
-}
-
-export interface Testimonial {
+  type?: 'booking' | 'contact_form' | 'callback_request';
+  role?: ProfessionalRole;
   name: string;
-  role: string;
-  content: string;
-  location: string;
-  verified?: boolean;
+  email: string;
+  phone: string;
+  philosophy?: DesignPhilosophy;
+  capacity?: ProjectCapacity; 
+  barrier?: string;
+  message?: string; // Field for contact form messages
+  scheduledDate?: string;
+  scheduledTime?: string;
+  submittedAt: string;
 }
 
-export interface FaqItem {
-  question: string;
-  answer: string;
-}
-
-export interface PricingPlan {
-  id: string;
-  duration: string;
-  price: string;
-  originalPrice?: string;
-  period: string;
-  label?: string;
-  features: string[];
-  accentColor: string;
+export interface AdminCredentials {
+  username: string;
+  pass: string;
 }
