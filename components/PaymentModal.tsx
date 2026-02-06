@@ -64,7 +64,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) =
   const formatTime = (val: number) => val.toString().padStart(2, '0');
 
   const handleFinalRedirect = () => {
-    window.location.href = 'https://www.avada.space/books';
+    window.location.href = 'https://www.avada.space/order';
   };
 
   const isBundleComplete = addedCount >= COURSES.length;

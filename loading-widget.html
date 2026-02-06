@@ -1,0 +1,143 @@
+<!-- 
+  SYSTEME.IO INSTRUCTIONS:
+  1. Add a "Raw HTML" element to your page.
+  2. Paste ALL the code below into that element.
+  3. Save and Preview.
+-->
+
+<!-- 1. Load Dependencies (Tailwind CSS & Fonts) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+<!-- 2. Configure Styles -->
+<script>
+  // Check if tailwind is already loaded to avoid errors
+  if (typeof tailwind === 'undefined') {
+      // If the CDN script above hasn't loaded yet, this config might need to wait, 
+      // but usually browsers handle linear execution for inline scripts.
+      // We rely on the script tag above.
+  }
+  
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Outfit', 'sans-serif'],
+          display: ['Space Grotesk', 'sans-serif'],
+        },
+        colors: {
+          brand: {
+            primary: '#D90429',
+            success: '#10b981',
+          }
+        },
+        animation: {
+            'spin-slow': 'spin 3s linear infinite',
+        }
+      }
+    }
+  }
+</script>
+
+<!-- 3. The Widget Structure -->
+<div id="avada-loading-widget" class="w-full max-w-2xl mx-auto bg-white p-6 md:p-10 rounded-[2.5rem] shadow-xl border border-gray-100 text-center font-sans my-8 relative z-10">
+    
+    <!-- Header Status -->
+    <div class="flex flex-col items-center justify-center mb-8">
+        <div class="inline-flex items-center gap-2 mb-3 bg-gray-50 px-4 py-1.5 rounded-full border border-gray-100 shadow-sm">
+            <svg class="animate-spin text-brand-primary w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span class="text-[10px] font-black uppercase tracking-[0.25em] text-gray-500">Preparing Collection</span>
+        </div>
+        <h3 class="text-3xl md:text-4xl font-black font-display text-gray-900 mb-2">Adding All Books</h3>
+        <p class="text-gray-400 text-xs md:text-sm font-bold tracking-wide">Unlocking high-res chapters...</p>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="relative mb-10 px-2 md:px-6">
+        <div class="h-2 w-full bg-gray-100 rounded-full overflow-hidden shadow-inner border border-gray-50">
+           <div id="avada-progress-fill" class="h-full bg-gradient-to-r from-brand-primary to-red-400 transition-all duration-300 ease-out w-0"></div>
+        </div>
+    </div>
+
+    <!-- Books Grid -->
+    <div id="avada-books-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 text-left">
+        <!-- Items will be injected here by JS -->
+    </div>
+
+</div>
+
+<!-- 4. Logic Script -->
+<script>
+(function() {
+    // Configuration
+    const BOOKS = [
+        { title: "LIVING ROOM DESIGN BOOK", img: "https://drive.google.com/thumbnail?id=1YYJxA6NPSH23Oe3Nal_3QlW_DG0-mqKJ&sz=w200" },
+        { title: "KITCHEN DESIGN BOOK", img: "https://drive.google.com/thumbnail?id=1AlxdHun9I2AO639g4Q0YJv_BOzb9sbZe&sz=w200" },
+        { title: "BEDROOM DESIGN BOOK", img: "https://drive.google.com/thumbnail?id=12APuUeW_CUcJxCYDG-R0PhmtwpKmWqs8&sz=w200" },
+        { title: "WASHROOM DESIGN BOOK", img: "https://drive.google.com/thumbnail?id=17CCyJ7HJhtPg3XPS8y9wf7SOG_kVMgf8&sz=w200" },
+        { title: "STUDY DESIGN BOOK", img: "https://drive.google.com/thumbnail?id=1dzA2UnKUd_S37XMjh53ZiuhviZAivH1B&sz=w200" },
+        { title: "ELEVATIONS DESIGN BOOK", img: "https://drive.google.com/thumbnail?id=1_TGYyThr32ciEl7C7obqHnwq1_WOR8N2&sz=w200" }
+    ];
+
+    const grid = document.getElementById('avada-books-grid');
+    const progressBar = document.getElementById('avada-progress-fill');
+    let currentIndex = 0;
+
+    // Check if grid exists (prevents errors if script runs twice)
+    if (!grid || grid.children.length > 0) return;
+
+    // Initialize Grid with hidden items
+    BOOKS.forEach((book, index) => {
+        const item = document.createElement('div');
+        item.className = 'flex items-center gap-3 bg-white p-2.5 rounded-2xl border border-gray-100 shadow-[0_2px_10px_rgba(0,0,0,0.03)] opacity-0 transform translate-y-4 transition-all duration-500 ease-out';
+        item.id = `avada-book-${index}`;
+        item.innerHTML = `
+            <div class="w-10 h-10 md:w-12 md:h-12 rounded-lg overflow-hidden shrink-0 border border-gray-100 bg-gray-50">
+                 <img src="${book.img}" class="w-full h-full object-cover" alt="Cover" />
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="text-[9px] md:text-[10px] font-black text-gray-800 uppercase tracking-tight truncate">${book.title}</div>
+            </div>
+            <div class="w-5 h-5 md:w-6 md:h-6 rounded-full bg-green-50 flex items-center justify-center text-brand-success border border-green-100">
+               <svg class="w-3 h-3 md:w-3.5 md:h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="4">
+                   <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+               </svg>
+            </div>
+        `;
+        grid.appendChild(item);
+    });
+
+    // Animation Loop
+    function animateLoading() {
+        if (currentIndex >= BOOKS.length) {
+            return; 
+        }
+
+        // Reveal Item
+        const item = document.getElementById(`avada-book-${currentIndex}`);
+        if (item) {
+            item.classList.remove('opacity-0', 'translate-y-4');
+        }
+
+        // Update Progress
+        const progress = ((currentIndex + 1) / BOOKS.length) * 100;
+        if (progressBar) {
+            progressBar.style.width = `${progress}%`;
+        }
+
+        currentIndex++;
+        
+        // Schedule next item
+        setTimeout(animateLoading, 300); 
+    }
+
+    // Start after a slight delay
+    setTimeout(animateLoading, 500);
+
+})();
+</script>
