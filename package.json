@@ -1,21 +1,24 @@
 {
-  "name": "avada-design-course",
-  "version": "1.0.0",
-  "description": "Premium Design Course Platform",
-  "main": "server.js",
-  "type": "commonjs",
+  "name": "avada-design",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "build": "node build.js"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
-    "esbuild": "^0.19.5",
-    "express": "^4.18.2",
-    "stripe": "^14.5.0"
+    "react-dom": "^19.2.4",
+    "vite": "^7.3.1",
+    "@vitejs/plugin-react": "^5.1.3",
+    "lucide-react": "^0.563.0",
+    "react": "^19.2.4"
   },
-  "engines": {
-    "node": ">=16.0.0"
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
   }
 }
