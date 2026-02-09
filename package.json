@@ -6,7 +6,7 @@
   "type": "commonjs",
   "scripts": {
     "start": "node server.js",
-    "build": "node -e \"const fs=require('fs'); if(!fs.existsSync('dist')) fs.mkdirSync('dist'); fs.writeFileSync('dist/index.html', '<html><body>App running via server.js</body></html>');\""
+    "build": "node -e \"const fs=require('fs'); if(!fs.existsSync('dist')) fs.mkdirSync('dist'); fs.writeFileSync('dist/robots.txt', 'User-agent: *\\nAllow: /');\""
   },
   "dependencies": {
     "cors": "^2.8.5",
