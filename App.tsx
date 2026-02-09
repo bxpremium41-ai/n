@@ -163,16 +163,16 @@ const CallToActionWidget = ({ timeLeft, onClick }: { timeLeft: any, onClick: () 
         <div className="flex flex-col items-center text-center">
           
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-gray-900/5 backdrop-blur-xl border border-gray-100 rounded-full mb-8 shadow-sm">
-            <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">
+            <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-gray-900">
               Exclusive discount closing in: <span className="text-brand-primary tabular-nums font-mono ml-1">{formatTime(timeLeft.h)}:{formatTime(timeLeft.m)}:{formatTime(timeLeft.s)}</span>
             </span>
           </div>
 
           <div className="mb-8">
             <div className="flex items-center justify-center gap-4 md:gap-6">
-              <span className="text-lg md:text-3xl font-display font-bold text-gray-300 uppercase tracking-tighter opacity-70">Complete Collection</span>
+              <span className="text-lg md:text-3xl font-display font-bold text-gray-900 uppercase tracking-tighter opacity-80">Complete Collection</span>
               <div className="flex items-center gap-3">
-                <span className="text-xl md:text-4xl font-display font-black text-gray-200 line-through decoration-gray-900/10 decoration-2">$199</span>
+                <span className="text-xl md:text-4xl font-display font-black text-gray-600 line-through decoration-gray-900/60 decoration-2">$199</span>
                 <span className="text-4xl md:text-7xl font-display font-black text-gray-900 tracking-tighter">$49</span>
               </div>
             </div>
@@ -209,7 +209,7 @@ const VideoFrame = React.memo(() => (
   <div className="bg-white hand-drawn-border p-4 md:p-6 shadow-2xl relative overflow-hidden group">
     <div className="aspect-square w-full rounded-lg overflow-hidden border border-gray-100 bg-gray-50 relative">
       <iframe
-          src="https://iframe.mediadelivery.net/embed/489113/b4a866e8-863e-4de2-9286-3090502c085e?autoplay=true&loop=true&muted=true"
+          src="https://iframe.mediadelivery.net/embed/494628/3f3c1a24-ef55-43ae-8ee2-20544250e414?autoplay=true&loop=true&muted=true"
           className="absolute inset-0 w-full h-full border-0"
           allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; clipboard-write;"
           referrerPolicy="origin"
@@ -557,7 +557,7 @@ const App: React.FC = () => {
                                     style={{ zIndex, opacity, transform }}
                                 >
                                     <div className="w-12 h-12 md:w-16 md:h-16 bg-brand-success text-white rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 shadow-lg">
-                                        <CheckCircle size={22} className="md:w-8 md:h-8" strokeWidth={3} />
+                                        <CheckCircle2 size={22} className="md:w-8 md:h-8" strokeWidth={3} />
                                     </div>
                                     <p className="text-base md:text-2xl font-bold text-gray-800 text-left leading-tight">
                                         {point}
@@ -571,6 +571,70 @@ const App: React.FC = () => {
                         {ThisIsForYouPoints.map((_, i) => (
                             <div key={i} className={`h-1.5 rounded-full transition-all duration-500 ${stackIndex === i ? 'w-8 bg-brand-primary' : 'w-2 bg-gray-300'}`}></div>
                         ))}
+                    </div>
+                </div>
+
+                {/* NEW SECTION: INSIDE BOOKS GALLERY - LOOP SLIDE */}
+                <div className="mb-20 md:mb-32 border-t border-b border-gray-50 py-12 md:py-20 bg-white/50 overflow-hidden">
+                    <div className="text-center mb-10 md:mb-16">
+                        <h2 className="text-3xl md:text-6xl font-display font-black text-gray-900 uppercase tracking-tighter mb-4">Inside Books</h2>
+                        <div className="w-20 h-1.5 bg-brand-primary mx-auto rounded-full"></div>
+                    </div>
+                    
+                    <div className="relative w-full group">
+                        {/* Fade Gradients */}
+                        <div className="absolute left-0 top-0 bottom-0 w-20 md:w-40 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+                        <div className="absolute right-0 top-0 bottom-0 w-20 md:w-40 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+
+                         {/* Marquee Container */}
+                        <div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
+                            {/* Set 1 */}
+                            <div className="flex gap-5 md:gap-8 px-2.5 md:px-4">
+                                {CURRICULUM_DATA.map((book, idx) => (
+                                    <div key={`set1-${idx}`} className="shrink-0 w-[280px] md:w-[450px]">
+                                        <div className="relative rounded-[20px] md:rounded-[32px] overflow-hidden shadow-2xl border-[6px] border-white bg-white group/card aspect-[4/3] md:aspect-[16/10]">
+                                            <img 
+                                                src={book.imageUrl} 
+                                                alt={`Inside ${book.title}`} 
+                                                className="w-full h-full object-cover transform transition-transform duration-700 group-hover/card:scale-105" 
+                                                loading="lazy"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex items-end p-6 md:p-8">
+                                                <div className="transform translate-y-4 group-hover/card:translate-y-0 transition-transform duration-300">
+                                                    <div className="flex items-center gap-2 mb-2">
+                                                        <span className="text-[10px] font-black uppercase tracking-widest text-white bg-brand-primary px-3 py-1 rounded-full">{book.bookNum}</span>
+                                                    </div>
+                                                    <h4 className="text-white font-display font-bold text-xl md:text-3xl leading-none">{book.title}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            {/* Set 2 (Duplicate for loop) */}
+                            <div className="flex gap-5 md:gap-8 px-2.5 md:px-4">
+                                {CURRICULUM_DATA.map((book, idx) => (
+                                    <div key={`set2-${idx}`} className="shrink-0 w-[280px] md:w-[450px]">
+                                        <div className="relative rounded-[20px] md:rounded-[32px] overflow-hidden shadow-2xl border-[6px] border-white bg-white group/card aspect-[4/3] md:aspect-[16/10]">
+                                            <img 
+                                                src={book.imageUrl} 
+                                                alt={`Inside ${book.title}`} 
+                                                className="w-full h-full object-cover transform transition-transform duration-700 group-hover/card:scale-105" 
+                                                loading="lazy"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex items-end p-6 md:p-8">
+                                                <div className="transform translate-y-4 group-hover/card:translate-y-0 transition-transform duration-300">
+                                                    <div className="flex items-center gap-2 mb-2">
+                                                        <span className="text-[10px] font-black uppercase tracking-widest text-white bg-brand-primary px-3 py-1 rounded-full">{book.bookNum}</span>
+                                                    </div>
+                                                    <h4 className="text-white font-display font-bold text-xl md:text-3xl leading-none">{book.title}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -633,9 +697,6 @@ const App: React.FC = () => {
                       key={activeCurriculumIndex}
                       className="lg:col-span-8 bg-white hand-drawn-border p-6 md:p-14 shadow-xl relative overflow-hidden group animate-page-turn"
                     >
-                        <div className="bg-gray-50 rounded-2xl p-3 md:p-4 border border-dashed border-gray-200 mb-8 md:mb-10 overflow-hidden relative">
-                            <img src={activeCurriculum.imageUrl} alt={activeCurriculum.title} className="w-full h-auto transition-transform duration-700 group-hover:scale-[1.03]" />
-                        </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 md:gap-x-12 gap-y-6 md:gap-y-10 text-left">
                             {activeCurriculum.sections.map((section, idx) => (
                                 <div key={idx} className="space-y-3">

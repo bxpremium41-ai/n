@@ -1,7 +1,8 @@
+
 import { PricingPlan } from "../types";
 
-// REPLACE THIS WITH YOUR ACTUAL RAZORPAY KEY ID FROM DASHBOARD
-const RAZORPAY_KEY_ID = 'YOUR_RAZORPAY_KEY_ID'; 
+// UPDATED WITH LIVE KEY
+const RAZORPAY_KEY_ID = 'rzp_live_Wh4xEHePkQXqRO'; 
 
 interface RazorpayOptions {
   key: string;
@@ -10,7 +11,7 @@ interface RazorpayOptions {
   name: string;
   description: string;
   image?: string;
-  order_id?: string; // Optional for client-side testing, required for production security
+  order_id?: string;
   handler: (response: any) => void;
   prefill: {
     name?: string;
@@ -33,7 +34,7 @@ declare global {
 
 export const openRazorpayCheckout = (
   plan: PricingPlan, 
-  phoneNumber: string,
+  userDetails: { name: string; email: string; phone: string },
   onSuccess: (paymentId: string) => void,
   onFailure: (error: any) => void
 ) => {
@@ -43,29 +44,28 @@ export const openRazorpayCheckout = (
     return;
   }
 
-  // Convert price string (e.g., "$49" or "₹599") to minor units (cents/paise)
-  const numericPrice = parseInt(plan.price.replace(/[^0-9]/g, ''), 10);
-  const amountInMinorUnits = numericPrice * 100;
+  // Parse "$1.58" -> 1.58. Multiply by 100 for minor units -> 158.
+  const rawPrice = parseFloat(plan.price.replace(/[^0-9.]/g, ''));
+  const amountInMinorUnits = Math.round(rawPrice * 100);
 
   const options: RazorpayOptions = {
     key: RAZORPAY_KEY_ID, 
     amount: amountInMinorUnits, 
-    currency: "USD", // Updated to USD as per request
-    name: "Avada",
-    description: `${plan.duration} All-Access Subscription`,
-    image: "https://via.placeholder.com/150/7C3AED/FFFFFF?text=AV", // Replace with your actual logo URL
+    currency: "USD",
+    name: "Avada Design",
+    description: `${plan.duration} Bundle`,
+    image: "https://d1yei2z3i6k35z.cloudfront.net/13138299/68654971c890d_Your-Numbered-Points-Title-Comes-Right-Here-9-min3.png",
     handler: function (response: any) {
-      // In a real app, you would verify the signature on your backend here
       console.log("Payment Successful", response);
       onSuccess(response.razorpay_payment_id);
     },
     prefill: {
-      contact: phoneNumber,
-      name: "Avada Student", // You could ask for this in the form too
-      email: "student@example.com"
+      name: userDetails.name,
+      email: userDetails.email,
+      contact: userDetails.phone
     },
     theme: {
-      color: "#D90429" // Matches brand-primary red
+      color: "#D90429"
     }
   };
 

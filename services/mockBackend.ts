@@ -35,6 +35,15 @@ export const submitPhoneNumber = async (phoneNumber: string, planId: string = 'u
   });
 };
 
+export const processDemoPayment = async (amount: number, email: string): Promise<boolean> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      console.log(`[DEMO PAYMENT] Processed $${amount} for ${email}`);
+      resolve(true);
+    }, 2000);
+  });
+};
+
 export const getLeads = (): Lead[] => {
   try {
     return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]').reverse(); // Newest first

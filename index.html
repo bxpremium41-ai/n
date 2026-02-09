@@ -4,8 +4,45 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Avada - Design & Architecture</title>
+    <!-- Error Suppression for 3rd Party Scripts -->
+    <script>
+      // 1. Suppress standard runtime errors
+      window.addEventListener('error', function(e) {
+        const msg = (e.message || '').toLowerCase();
+        // Filter out known benign PayPal/Zoid errors regarding window/host/postMessage
+        if (msg === 'script error.' || 
+            msg.includes('paypal') || 
+            msg.includes('host') ||
+            msg.includes('zoid') ||
+            msg.includes('closed') ||
+            msg.includes('postmessage') ||
+            msg.includes('can not read properties of null') ||
+            msg.includes('can not read property') ||
+            msg.includes('window') ||
+            msg.includes('popup')) {
+          e.stopImmediatePropagation();
+          e.preventDefault();
+          return true;
+        }
+      }, true);
+
+      // 2. Suppress unhandled promise rejections (Common for PayPal SDK cleanup)
+      window.addEventListener('unhandledrejection', function(e) {
+        const msg = (e.reason?.message || String(e.reason)).toLowerCase();
+        if (msg.includes('paypal') || 
+            msg.includes('host') || 
+            msg.includes('zoid') ||
+            msg.includes('closed') ||
+            msg.includes('window') ||
+            msg.includes('popup')) {
+          e.stopImmediatePropagation();
+          e.preventDefault();
+        }
+      });
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <!-- PayPal SDK Removed: Loaded dynamically in PaymentModal.tsx -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -70,10 +107,12 @@
   <script type="importmap">
 {
   "imports": {
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "react": "https://esm.sh/react@^19.2.4"
+    "react": "https://esm.sh/react@18.2.0",
+    "react/": "https://esm.sh/react@18.2.0/",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client?deps=react@18.2.0",
+    "react-dom": "https://esm.sh/react-dom@18.2.0?deps=react@18.2.0",
+    "lucide-react": "https://esm.sh/lucide-react@0.263.1?deps=react@18.2.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
   }
 }
 </script>

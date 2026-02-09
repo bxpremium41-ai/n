@@ -1,5 +1,5 @@
 {
-  "name": "business",
+  "name": "work-stripe",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,9 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "react": "18.2.0",
     "react-dom": "^19.2.4",
-    "lucide-react": "^0.563.0",
-    "react": "^19.2.4"
+    "lucide-react": "0.263.1"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
