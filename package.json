@@ -6,7 +6,7 @@
   "type": "commonjs",
   "scripts": {
     "start": "node server.js",
-    "build": "echo 'No build step required for runtime-transpiled app' && exit 0"
+    "build": "node -e \"const fs=require('fs'); if(!fs.existsSync('dist')) fs.mkdirSync('dist'); fs.writeFileSync('dist/index.html', '<html><body>App running via server.js</body></html>');\""
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -16,6 +16,6 @@
     "stripe": "^14.5.0"
   },
   "engines": {
-    "node": "16.x"
+    "node": ">=16.0.0"
   }
 }
