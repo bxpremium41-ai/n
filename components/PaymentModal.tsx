@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Lock, Check, Loader2, Timer, CreditCard, Mail, ShieldCheck, AlertCircle, WifiOff, RefreshCcw, Activity, Shield, ArrowRight, Smartphone, Globe, BookOpen, Star, Zap, CheckCircle2, FileCheck, ChevronDown, User, Landmark, Download } from 'lucide-react';
 import { Course } from '../types';
@@ -7,11 +8,12 @@ import { COURSES } from '../constants';
 const STRIPE_PUBLISHABLE_KEY = "pk_live_51PRJCsGGsoQTkhyv6OrT4zvnaaB5Y0MSSkTXi0ytj33oygsfW3dcu6aOFa9q3dr2mXYTCJErnFQJcOcyuDAsQd4B00lIAdclbB"; 
 
 // --- BACKEND CONNECTION SETTINGS ---
-const PRODUCTION_URL = "https://avaada.space";
-const BACKEND_URL = PRODUCTION_URL;
+// Auto-detect if we are in development or production
+const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+const BACKEND_URL = isLocal ? "http://localhost:4242" : ""; // Empty string for relative path in production
 
 const PAYPAL_BUSINESS_EMAIL = "design@avada.in"; 
-const PAYPAL_LOGO_URL = "https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg"; // Updated to a cleaner SVG URL for better rendering
+const PAYPAL_LOGO_URL = "https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg"; 
 
 declare global {
   interface Window {
@@ -32,7 +34,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) =
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [debugInfo, setDebugInfo] = useState<string>('');
   const [isStripeLoaded, setIsStripeLoaded] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ h: 2, m: 14, s: 30 });
   const [addedBooksCount, setAddedBooksCount] = useState(0);
@@ -54,7 +55,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) =
     setPaymentMethod('card');
     setEmail('');
     setErrorMessage(null);
-    setDebugInfo('');
     setIsStripeLoaded(false);
     
     // FIX: Clear refs to ensure clean re-initialization
@@ -107,11 +107,11 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) =
 
   // Init Stripe when in FORM view
   useEffect(() => {
-    if (viewState === 'FORM' && !hasInitializedStripe.current) {
+    if (viewState === 'FORM' && !hasInitializedStripe.current && paymentMethod === 'card') {
         hasInitializedStripe.current = true;
         initializeStripe();
     }
-  }, [viewState]);
+  }, [viewState, paymentMethod]);
 
   const initializeStripe = async (retry = 0) => {
     try {
@@ -122,26 +122,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) =
         // Double check ref to prevent race conditions or double init
         if (elementsRef.current) return;
 
-        console.log(`Connecting to backend: ${BACKEND_URL}/create-payment-intent`); 
-
-        // 1. Health Check
-        const healthCheck = await fetch(`${BACKEND_URL}/`, { method: 'GET' }).catch((err) => {
-             console.error("Health Check Network Error:", err);
-             return null;
-        });
-        
-        if (!healthCheck) {
-             setDebugInfo(`Connection to ${BACKEND_URL} failed. Check console.`);
-             throw new Error("NETWORK_ERROR");
-        }
-
-        const healthData = await healthCheck.json().catch(() => null);
-        
-        // 2. Check Key
-        if (healthData && healthData.status === "online" && !healthData.stripe_configured) {
-            setDebugInfo(`Server Online but Key Missing.`);
-            throw new Error("CONFIG_ERROR");
-        }
+        console.log(`Connecting to backend...`); 
 
         // 3. Create Payment Intent
         const res = await fetch(`${BACKEND_URL}/create-payment-intent`, {
@@ -154,6 +135,11 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) =
         });
 
         if (!res.ok) {
+            // Check if 404 - means backend is missing (Static Mode)
+            if (res.status === 404) {
+                 console.warn("Backend not found. Running in Static/Demo Mode.");
+                 throw new Error("STATIC_MODE");
+            }
             const errData = await res.json().catch(() => ({}));
             throw new Error(errData.error || `Server error: ${res.status}`);
         }
@@ -175,7 +161,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) =
                     colorDanger: '#ef4444',
                     spacingUnit: '4px',
                     fontSizeBase: '15px',
-                    fontWeightNormal: '500', // Thinner placeholder
+                    fontWeightNormal: '500', 
                 },
                 rules: {
                     '.Input': { 
@@ -192,7 +178,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) =
                     },
                     '.Input:focus': { 
                         border: '1px solid #0A2540', 
-                        boxShadow: '0 0 0 4px rgba(10, 37, 64, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.05)', // Dark blue glow to match card button
+                        boxShadow: '0 0 0 4px rgba(10, 37, 64, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.05)', 
                     },
                     '.Label': {
                         fontWeight: '500',
@@ -227,11 +213,16 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) =
 
     } catch (err: any) {
         console.error("Stripe Init Failed:", err);
-        if (err.message === "NETWORK_ERROR" || err.message === "CONFIG_ERROR") {
+        if (err.message === "STATIC_MODE") {
+            // Fallback for static hosting where backend is absent
+            setErrorMessage("Direct card payments are temporarily unavailable due to server maintenance. Please use PayPal.");
+            setPaymentMethod('paypal');
+        } else if (err.message === "NETWORK_ERROR" || err.message === "CONFIG_ERROR") {
             setViewState('CONNECTION_ERROR');
         } else {
-            setErrorMessage(err.message || "Connection Failed");
+            setErrorMessage("Card gateway unavailable. Please try PayPal.");
             setIsStripeLoaded(false);
+            setPaymentMethod('paypal'); // Auto switch to PayPal on error
         }
     }
   };
