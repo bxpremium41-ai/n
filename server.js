@@ -33,7 +33,10 @@ app.use(express.json());
 app.use(cors()); 
 
 app.use((req, res, next) => {
-    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    // Log only relevant requests to keep logs clean
+    if (!req.url.endsWith('.css') && !req.url.endsWith('.png')) {
+        console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    }
     next();
 });
 
@@ -44,28 +47,33 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
     // 1. Resolve Extensionless Imports (e.g., import App from './App')
     let filePath = path.join(__dirname, req.path);
+    
+    // Check if the file exists on disk with specific extensions
+    let fileExistsWithExt = "";
     if (!fs.existsSync(filePath) && !req.path.includes('.')) {
-        if (fs.existsSync(filePath + '.tsx')) filePath += '.tsx';
-        else if (fs.existsSync(filePath + '.ts')) filePath += '.ts';
+        if (fs.existsSync(filePath + '.tsx')) fileExistsWithExt = filePath + '.tsx';
+        else if (fs.existsSync(filePath + '.ts')) fileExistsWithExt = filePath + '.ts';
+    } else if (fs.existsSync(filePath)) {
+        if (filePath.endsWith('.tsx') || filePath.endsWith('.ts')) fileExistsWithExt = filePath;
     }
 
     // 2. Transpile TypeScript/JSX
-    if (filePath.endsWith('.tsx') || filePath.endsWith('.ts')) {
+    if (fileExistsWithExt) {
         try {
-            if (fs.existsSync(filePath)) {
-                const content = fs.readFileSync(filePath, 'utf8');
-                const result = esbuild.transformSync(content, {
-                    loader: 'tsx',
-                    target: 'es2020',
-                    format: 'esm', // Important: Output as ES Module
-                });
-                
-                res.setHeader('Content-Type', 'application/javascript');
-                return res.send(result.code);
-            }
+            const content = fs.readFileSync(fileExistsWithExt, 'utf8');
+            const loader = fileExistsWithExt.endsWith('.ts') ? 'ts' : 'tsx';
+            
+            const result = esbuild.transformSync(content, {
+                loader: loader,
+                target: 'es2020',
+                format: 'esm', // Important: Output as ES Module
+            });
+            
+            res.setHeader('Content-Type', 'application/javascript');
+            return res.send(result.code);
         } catch (e) {
-            console.error("Transpilation Error:", e);
-            return res.status(500).send(e.message);
+            console.error(`❌ Transpilation Error for ${req.path}:`, e.message);
+            return res.status(500).send(`Transpilation Error: ${e.message}`);
         }
     }
     next();
