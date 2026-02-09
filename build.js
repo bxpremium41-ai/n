@@ -5,17 +5,27 @@ const path = require('path');
 console.log("🚀 Starting Build Process...");
 
 // 1. Clean/Create dist folder
-if (fs.existsSync('dist')) {
-    fs.rmSync('dist', { recursive: true, force: true });
+try {
+    if (fs.existsSync('dist')) {
+        fs.rmSync('dist', { recursive: true, force: true });
+    }
+    fs.mkdirSync('dist');
+} catch (e) {
+    console.warn("⚠️  Could not clean dist folder, continuing...", e.message);
+    if (!fs.existsSync('dist')) fs.mkdirSync('dist');
 }
-fs.mkdirSync('dist');
 
 // 2. Process HTML
 // We read the index.html and point it to the new bundled JS file instead of the raw TSX
-let html = fs.readFileSync('index.html', 'utf8');
-html = html.replace('src="./index.tsx"', 'src="./bundle.js"');
-fs.writeFileSync('dist/index.html', html);
-console.log("✅ HTML processed and copied to dist/");
+try {
+    let html = fs.readFileSync('index.html', 'utf8');
+    html = html.replace('src="./index.tsx"', 'src="./bundle.js"');
+    fs.writeFileSync('dist/index.html', html);
+    console.log("✅ HTML processed and copied to dist/");
+} catch (e) {
+    console.error("❌ Failed to process HTML:", e.message);
+    process.exit(1);
+}
 
 // 3. Bundle Application
 // We bundle index.tsx but keep React external because we use the importmap in index.html
@@ -33,7 +43,7 @@ try {
     });
     console.log("✅ App bundled successfully into dist/bundle.js");
 } catch (e) {
-    console.error("❌ Build Failed:", e);
+    console.error("❌ Build Failed during bundling:", e.message);
     process.exit(1);
 }
 
